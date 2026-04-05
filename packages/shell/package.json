@@ -1,0 +1,13 @@
+{
+  "name": "@anthropic/shell",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "dependencies": {
+    "execa": "workspace:*",
+    "lodash-es": "workspace:*",
+    "tree-kill": "workspace:*"
+  }
+}

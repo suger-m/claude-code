@@ -74,23 +74,25 @@
 ├─────────────────────────────────────────────────────────────────────────┤
 │                                                                         │
 │  ┌──────────────────── packages/agent ──────────────────────────┐      │
-│  │                  (核心引擎, 零 UI 依赖)                           │      │
+│  │      (独立包: 核心引擎, 零外部运行时依赖)                        │      │
 │  │                                                               │      │
-│  │   query()            QueryEngine          HookLifecycle       │      │
-│  │   ├─ streaming       ├─ turn管理          ├─ PreToolUse       │      │
-│  │   ├─ recovery        ├─ compaction        ├─ PostToolUse      │      │
-│  │   ├─ attachments     ├─ SDK消息转换       ├─ Notification     │      │
-│  │   └─ abort           └─ budget追踪        ├─ Stop             │      │
-│  │                                          ├─ SubagentStop      │      │
-│  │   CompactionService    CronScheduler      ├─ UserPromptSubmit │      │
-│  │   (snip/micro/auto)    (定时任务/抖动)     ├─ SessionStart/End │      │
-│  │                                          ├─ PreCompact/      │      │
-│  │   LocalMainSessionTask                   │  PostCompact       │      │
-│  │   (15373行 → 分解重构)                   ├─ Permission*      │      │
-│  │                                          └─ ... (27种事件)    │      │
-│  │   QueryDeps (依赖注入)                                        │      │
+│  │   AgentCore          AgentLoop            AgentDeps (DI)      │      │
+│  │   ├─ run()           ├─ 核心消息循环       ├─ ProviderDep     │      │
+│  │   ├─ interrupt()     ├─ streaming         ├─ ToolDep          │      │
+│  │   ├─ getMessages()   ├─ recovery          ├─ PermissionDep    │      │
+│  │   ├─ getState()      ├─ attachments       ├─ OutputDep        │      │
+│  │   └─ setModel()      └─ abort             ├─ HookDep          │      │
+│  │                                          ├─ CompactionDep    │      │
+│  │   AgentEvent (统一事件流)                  ├─ ContextDep       │      │
+│  │   ├─ message / stream                    └─ SessionDep       │      │
+│  │   ├─ tool_start/progress/result                              │      │
+│  │   ├─ permission_request   ← 通信契约:                     │      │
+│  │   ├─ compaction             入: AgentInput + AgentDeps     │      │
+│  │   └─ done                   出: AsyncGenerator<AgentEvent>  │      │
+│  │                                                               │      │
+│  │   禁止: import src/, React, Ink, bun:bundle, AppState       │      │
 │  └──────────────────────────┬────────────────────────────────────┘      │
-│                             │                                           │
+│                             │ (AgentDeps 接口，由 src/agent/ 适配器实现) │
 ├─────────────────────────────┼───────────────────────────────────────────┤
 │                             ▼                                           │
 │  ┌──────────────── packages/provider ────────────────────────┐         │
@@ -325,7 +327,7 @@ packages/
 ├── permission/         ← Phase 2   权限系统, 独立实现
 ├── config/             ← Phase 2   配置管理 + FeatureFlag + GlobalConfig
 ├── telemetry/          ← Phase 2   遥测/诊断 (真实实现, 非空stub)
-├── agent/              ← Phase 3   核心引擎 + Hook 生命周期 + Compaction + Cron
+├── agent/              ← Phase 3   独立包: 核心引擎 (零外部依赖, AgentDeps DI, AgentEvent 事件流) + 适配器层 (src/agent/)
 ├── provider/           ← Phase 4   ProviderAdapter + AuthProvider + NetworkLayer
 ├── shell/              ← Phase 4   Shell 执行层 (Bash/Zsh/PowerShell)
 ├── swarm/              ← Phase 5   多Agent协调 + Worktree
@@ -363,7 +365,10 @@ Phase 2: 独立系统提取                          风险: 低-中
   └── packages/telemetry/      遥测/诊断 (真实实现, 谨慎提取)
 
 Phase 3: packages/agent/                  风险: 中-高
-  ├── query() + QueryEngine 核心循环
+  ├── 独立包 (零外部运行时依赖，所有能力通过 AgentDeps 注入)
+  ├── AgentCore + AgentLoop 核心循环 (from query.ts)
+  ├── AgentEvent 统一事件流 (唯一输出通道)
+  ├── src/agent/ 适配器层 (桥接现有实现到 AgentDeps 接口)
   ├── Hook 生命周期 (hooks.ts 5177行 + hooks/ 5文件 → 提取, 27种事件)
   ├── Compaction 服务 (services/compact/ 29文件 → 统一)
   ├── Cron/Scheduler (utils/cron* → 提取)

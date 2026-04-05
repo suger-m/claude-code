@@ -317,6 +317,13 @@
 
 **当前状态**: 未创建。核心引擎代码约 8229 行+
 
+**包独立性原则**:
+- `packages/agent` 是独立包，零外部运行时依赖（不 import src/, React, Ink, bun:bundle）
+- 所有外部能力通过 `AgentDeps` 依赖注入接口传入
+- 唯一输出通道为 `AsyncGenerator<AgentEvent>` 统一事件流
+- 适配器层 (`src/agent/`) 桥接现有实现到 `AgentDeps` 接口
+- 详细设计见 `specs/feature-agent-core/design.md`
+
 ### 3.1 query() + QueryEngine 核心循环
 
 **源文件**:
@@ -325,12 +332,15 @@
 - Phase 0 分解后的子模块
 
 **需要做的具体工作**:
-1. 创建 `packages/agent/` 包结构
-2. 迁移 query() 异步生成器（streaming、recovery、attachments、abort）
-3. 迁移 QueryEngine（turn 管理、compaction、SDK 消息转换、budget 追踪）
-4. 定义 `QueryDeps` 依赖注入接口（替代硬编码的模块引用）
+1. 创建 `packages/agent/` 包结构（独立包，`@anthropic/agent`）
+2. 定义 `AgentDeps` 8 个子接口（provider, tools, permission, output, hooks, compaction, context, session）
+3. 定义 `AgentEvent` 统一事件流类型（message, tool_start/progress/result, permission_request, compaction, done）
+4. 迁移 query() 核心循环到 `packages/agent/core/AgentLoop.ts`
+5. 创建 `AgentCore` 公共 API 类（run/interrupt/getMessages/getState/setModel）
+6. 在 `src/agent/` 创建适配器实现，桥接现有代码到 AgentDeps 接口
+7. 重构 QueryEngine 为会话编排层（内部组合 AgentCore）
 
-**依赖关系**: 依赖 packages/provider（API 调用）、packages/agent-tools（工具调用）、packages/permission（权限检查）
+**依赖关系**: AgentDeps 接口由 src/agent/ 适配器桥接（provider→services/api, tools→ToolRegistry, permission→permissions pipeline, 等）
 
 **风险**: 中-高。这是核心循环，任何变更都可能影响对话质量
 
@@ -650,7 +660,7 @@
 
 ### P2 — 高价值但复杂（Phase 3-4）
 7. **packages/provider/** + Auth Provider — 多模型支持核心
-8. **packages/agent/** — 核心引擎
+8. **packages/agent/** — 核心引擎 (独立包, 零外部依赖, AgentDeps DI + AgentEvent 事件流)
 9. **packages/shell/** — Shell 执行层
 10. **REPL.tsx 分解** — 可维护性
 11. **packages/telemetry/** — 可观测性

@@ -315,10 +315,7 @@ import type { MCPServerConnection } from '../services/mcp/types.js'
 import type { ScopedMcpServerConfig } from '../services/mcp/types.js'
 import { randomUUID, type UUID } from 'crypto'
 import { processSessionStartHooks } from '../utils/sessionStart.js'
-import {
-  executeSessionEndHooks,
-  getSessionEndHookTimeoutMs,
-} from '../utils/hooks.js'
+import { executeSessionEndHooks, getSessionEndHookTimeoutMs } from '../utils/hooks/events/sessionEvents.js'
 import { type IDESelection, useIdeSelection } from '../hooks/useIdeSelection.js'
 import { getTools, assembleToolPool } from '../tools.js'
 import type { AgentDefinition } from '../tools/AgentTool/loadAgentsDir.js'

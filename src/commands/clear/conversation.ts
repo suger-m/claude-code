@@ -25,10 +25,7 @@ import { asAgentId } from '../../types/ids.js'
 import type { Message } from '../../types/message.js'
 import { createEmptyAttributionState } from '../../utils/commitAttribution.js'
 import type { FileStateCache } from '../../utils/fileStateCache.js'
-import {
-  executeSessionEndHooks,
-  getSessionEndHookTimeoutMs,
-} from '../../utils/hooks.js'
+import { executeSessionEndHooks, getSessionEndHookTimeoutMs } from '../../utils/hooks/events/sessionEvents.js'
 import { logError } from '../../utils/log.js'
 import { clearAllPlanSlugs } from '../../utils/plans.js'
 import { setCwd } from '../../utils/Shell.js'

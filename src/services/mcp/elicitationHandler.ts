@@ -6,11 +6,8 @@ import {
   type ElicitResult,
 } from '@modelcontextprotocol/sdk/types.js'
 import type { AppState } from '../../state/AppState.js'
-import {
-  executeElicitationHooks,
-  executeElicitationResultHooks,
-  executeNotificationHooks,
-} from '../../utils/hooks.js'
+import { executeElicitationHooks, executeElicitationResultHooks } from '../../utils/hooks/events/permissionEvents.js'
+import { executeNotificationHooks } from '../../utils/hooks/events/notificationEvents.js'
 import { logMCPDebug, logMCPError } from '../../utils/log.js'
 import { jsonStringify } from '../../utils/slowOperations.js'
 import {

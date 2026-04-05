@@ -3,10 +3,7 @@ import { z } from 'zod/v4'
 import { getFeatureValue_CACHED_MAY_BE_STALE } from '../../services/analytics/growthbook.js'
 import { buildTool, type ToolDef } from '../../Tool.js'
 import { isAgentSwarmsEnabled } from '../../utils/agentSwarmsEnabled.js'
-import {
-  executeTaskCompletedHooks,
-  getTaskCompletedHookMessage,
-} from '../../utils/hooks.js'
+import { executeTaskCompletedHooks, getTaskCompletedHookMessage } from '../../utils/hooks/events/teamEvents.js'
 import { lazySchema } from '../../utils/lazySchema.js'
 import {
   blockTask,

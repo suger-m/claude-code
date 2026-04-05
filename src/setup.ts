@@ -37,7 +37,7 @@ import {
   captureHooksConfigSnapshot,
   updateHooksConfigSnapshot,
 } from './utils/hooks/hooksConfigSnapshot.js'
-import { hasWorktreeCreateHook } from './utils/hooks.js'
+import { hasWorktreeCreateHook } from './utils/hooks/events/worktreeEvents.js'
 import { checkAndRestoreITerm2Backup } from './utils/iTermBackup.js'
 import { logError } from './utils/log.js'
 import { getRecentActivity } from './utils/logoV2Utils.js'

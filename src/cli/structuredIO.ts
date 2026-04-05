@@ -41,7 +41,7 @@ import { jsonStringify } from 'src/utils/slowOperations.js'
 import { z } from 'zod/v4'
 import { notifyCommandLifecycle } from '../utils/commandLifecycle.js'
 import { normalizeControlMessageKeys } from '../utils/controlMessageCompat.js'
-import { executePermissionRequestHooks } from '../utils/hooks.js'
+import { executePermissionRequestHooks } from '../utils/hooks/events/permissionEvents.js'
 import {
   applyPermissionUpdates,
   persistPermissionUpdates,

@@ -2209,7 +2209,7 @@ export async function bridgeMain(args: string[]): Promise<void> {
 
   // Precheck worktree availability for the first-run dialog and the `w`
   // toggle. Unconditional so we know upfront whether worktree is an option.
-  const { hasWorktreeCreateHook } = await import('../utils/hooks.js')
+  const { hasWorktreeCreateHook } = await import('../utils/hooks/events/worktreeEvents.js')
   const worktreeAvailable = hasWorktreeCreateHook() || findGitRoot(dir) !== null
 
   // Load saved per-project spawn-mode preference. Gated by multiSessionEnabled
@@ -2859,7 +2859,7 @@ export async function runBridgeHeadless(
   const { getBranch, getRemoteUrl, findGitRoot } = await import(
     '../utils/git.js'
   )
-  const { hasWorktreeCreateHook } = await import('../utils/hooks.js')
+  const { hasWorktreeCreateHook } = await import('../utils/hooks/events/worktreeEvents.js')
 
   if (opts.spawnMode === 'worktree') {
     const worktreeAvailable =

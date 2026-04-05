@@ -53,10 +53,7 @@ import {
   type CacheSafeParams,
   runForkedAgent,
 } from '../../utils/forkedAgent.js'
-import {
-  executePostCompactHooks,
-  executePreCompactHooks,
-} from '../../utils/hooks.js'
+import { executePostCompactHooks, executePreCompactHooks } from '../../utils/hooks/events/compactEvents.js'
 import { logError } from '../../utils/log.js'
 import { MEMORY_TYPE_VALUES } from '../../utils/memory/types.js'
 import {

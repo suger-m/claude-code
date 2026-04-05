@@ -15,12 +15,7 @@ import type {
 import type { PermissionDecision } from '../../types/permissions.js'
 import { createAttachmentMessage } from '../../utils/attachments.js'
 import { logForDebugging } from '../../utils/debug.js'
-import {
-  executePostToolHooks,
-  executePostToolUseFailureHooks,
-  executePreToolHooks,
-  getPreToolHookBlockingMessage,
-} from '../../utils/hooks.js'
+import { executePostToolHooks, executePostToolUseFailureHooks, executePreToolHooks, getPreToolHookBlockingMessage } from '../../utils/hooks/events/toolEvents.js'
 import { logError } from '../../utils/log.js'
 import {
   getRuleBehaviorDescription,

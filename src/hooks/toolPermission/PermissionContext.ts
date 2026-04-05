@@ -22,7 +22,7 @@ import type {
 } from '../../types/permissions.js'
 import { setClassifierApproval } from '../../utils/classifierApprovals.js'
 import { logForDebugging } from '../../utils/debug.js'
-import { executePermissionRequestHooks } from '../../utils/hooks.js'
+import { executePermissionRequestHooks } from '../../utils/hooks/events/permissionEvents.js'
 import {
   REJECT_MESSAGE,
   REJECT_MESSAGE_WITH_REASON_PREFIX,

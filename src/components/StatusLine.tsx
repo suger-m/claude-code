@@ -38,10 +38,8 @@ import {
 import { getCwd } from '../utils/cwd.js'
 import { logForDebugging } from '../utils/debug.js'
 import { isFullscreenEnvEnabled } from '../utils/fullscreen.js'
-import {
-  createBaseHookInput,
-  executeStatusLineCommand,
-} from '../utils/hooks.js'
+import { createBaseHookInput } from '../utils/hooks/core/types.js'
+import { executeStatusLineCommand } from '../utils/hooks/executors/index.js'
 import { getLastAssistantMessage } from '../utils/messages.js'
 import {
   getRuntimeMainLoopModel,

@@ -237,7 +237,7 @@ import {
   runElicitationHooks,
   runElicitationResultHooks,
 } from 'src/services/mcp/elicitationHandler.js'
-import { executeNotificationHooks } from 'src/utils/hooks.js'
+import { executeNotificationHooks } from 'src/utils/hooks/events/notificationEvents.js'
 import {
   ElicitRequestSchema,
   ElicitationCompleteNotificationSchema,

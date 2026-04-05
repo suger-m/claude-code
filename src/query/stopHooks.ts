@@ -20,14 +20,8 @@ import { createAttachmentMessage } from '../utils/attachments.js'
 import { logForDebugging } from '../utils/debug.js'
 import { errorMessage } from '../utils/errors.js'
 import type { REPLHookContext } from '../utils/hooks/postSamplingHooks.js'
-import {
-  executeStopHooks,
-  executeTaskCompletedHooks,
-  executeTeammateIdleHooks,
-  getStopHookMessage,
-  getTaskCompletedHookMessage,
-  getTeammateIdleHookMessage,
-} from '../utils/hooks.js'
+import { executeStopHooks, getStopHookMessage } from '../utils/hooks/events/sessionEvents.js'
+import { executeTaskCompletedHooks, executeTeammateIdleHooks, getTaskCompletedHookMessage, getTeammateIdleHookMessage } from '../utils/hooks/events/teamEvents.js'
 import {
   createStopHookSummaryMessage,
   createSystemMessage,

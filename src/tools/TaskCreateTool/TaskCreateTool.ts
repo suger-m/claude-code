@@ -1,9 +1,6 @@
 import { z } from 'zod/v4'
 import { buildTool, type ToolDef } from '../../Tool.js'
-import {
-  executeTaskCreatedHooks,
-  getTaskCreatedHookMessage,
-} from '../../utils/hooks.js'
+import { executeTaskCreatedHooks, getTaskCreatedHookMessage } from '../../utils/hooks/events/teamEvents.js'
 import { lazySchema } from '../../utils/lazySchema.js'
 import {
   createTask,

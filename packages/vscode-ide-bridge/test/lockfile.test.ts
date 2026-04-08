@@ -1,3 +1,4 @@
+import { join } from 'node:path'
 import { describe, expect, test } from 'bun:test'
 import {
   buildLockfilePayload,
@@ -26,7 +27,7 @@ describe('lockfile helpers', () => {
 
     try {
       expect(getLockfilePath(4567)).toBe(
-        'D:\\tmp\\claude-config\\ide\\4567.lock',
+        join('D:/tmp/claude-config', 'ide', '4567.lock'),
       )
     } finally {
       if (originalConfigDir === undefined) {
